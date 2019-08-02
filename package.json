@@ -1,0 +1,29 @@
+{
+  "name": "splib",
+  "version": "1.0.0",
+  "description": "Fetch and write Sharepoint list data.",
+  "main": "dist/index.js",
+  "scripts": {
+    "postinstall": "npx babel src --out-dir dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theroka/splib.git"
+  },
+  "author": "Robin Kauschke <robin.kauschke@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/theroka/splib/issues"
+  },
+  "homepage": "https://github.com/theroka/splib#readme",
+  "dependencies": {
+    "fast-xml-parser": "^3.12.19"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "core-js": "^3.1.4"
+  }
+}

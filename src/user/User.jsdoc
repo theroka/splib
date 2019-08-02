@@ -1,0 +1,17 @@
+/**
+ * @typedef {Object} User
+ * @global
+ * @property {String} firstName
+ * @property {String} lastName
+ * @property {String} workEmail
+ * @property {String} workPhone=null
+ * @property {String} cellPhone=null
+ * @property {String} homePhone=null
+ * @property {String} department=null
+ * @property {String} company
+ * @property {String} account
+ * @property {String} username
+ * @property {String} websiteURL=null
+ * @property {String} thumbnail=null URL to user protrait thumbnail
+ * @property {String} gender=null
+ */

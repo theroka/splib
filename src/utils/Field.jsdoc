@@ -1,0 +1,12 @@
+/**
+ * @typedef {Object} Field
+ * @global
+ * @property {String} id
+ * @property {String} type
+ * @property {String} displayName
+ * @property {String} staticName
+ * @property {String} name
+ * @property {Boolean} required=false
+ * @property {Boolean} hidden=false
+ * @property {Boolean} dateOnly=false
+ */
