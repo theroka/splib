@@ -1,7 +1,0 @@
-/**
- * @typedef {Object} Login
- * @global
- * @property {String} name
- * @property {String} email
- * @property {String} login
- */
