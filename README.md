@@ -22,9 +22,9 @@ yarn postinstall
 ```
 Transpiled will be written to dist/.
 
-To generate source docs with ESDoc
+To generate source docs with Typedoc
 ```
-node_modules/.bin/esdoc
+node_modules/.bin/typedoc
 or
-yarn esdoc
+yarn typedoc
 ```
