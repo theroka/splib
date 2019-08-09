@@ -1,11 +1,13 @@
 "use strict";
 
+import { createLog } from "../utils/log";
 import { parse } from "date-fns";
 import { getOptions, endpointURL, createSoapBody, parser } from "./../caml";
 import { getCurrentSite } from "./../site";
 import { SiteURL } from "../user/types";
 import { List } from "./types";
 
+const log = createLog("getList")
 const ACTION = "GetList";
 
 /**
@@ -16,7 +18,9 @@ const ACTION = "GetList";
  * @return {Promise<Object>}
  */
 export async function getList(listname: string, site: SiteURL = null): Promise<List> {
+  log.group();
   const siteUrl = site || (await getCurrentSite());
+  log.debug("get list", listname, "from", siteUrl);
   const caml = `<listName>${listname}</listName>`;
   const body = createSoapBody(ACTION, caml);
   const url = endpointURL(ACTION, siteUrl);
@@ -25,7 +29,11 @@ export async function getList(listname: string, site: SiteURL = null): Promise<L
   let response = await fetch(url, { ...options, body });
   let xml = await response.text();
 
-  let data: any = parser(xml, ACTION, "List");
+  log.debug("parser path", "List")
+
+  let data: any = parser(xml, ACTION, "List")[0];
+
+  log.debug("data", data);
 
   let fields = data.Fields.Field.slice().map((field: any) => ({
     id: field.ID,
@@ -38,16 +46,23 @@ export async function getList(listname: string, site: SiteURL = null): Promise<L
     dateOnly: field.Hidden === "TRUE" || false
   }));
 
-  return {
+  log.debug("fields", fields)
+
+  let list = {
     id: data.ID,
-    title: data.Title.trim(),
-    description: data.Description.trim(),
-    created: parse(data.Created),
-    modified: parse(data.Modified),
-    defaultView: data.DefaultViewUrl,
+    title: data.Title.trim() || "",
+    description: data.Description.trim() || "",
+    created: parse(data.Created) || null,
+    modified: parse(data.Modified) || null,
+    defaultView: data.DefaultViewUrl || "",
     attachments: data.EnableAttachments === "True" ? true : false,
     folders: data.EnableFolderCreation === "True" ? true : false,
     itemsCount: parseInt(data.ItemCount),
     fields
   };
+
+  log.debug("list", list);
+  log.group();
+
+  return list;
 }

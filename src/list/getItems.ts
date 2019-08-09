@@ -1,15 +1,14 @@
 "use strict";
 
-import { concat, mergeWith } from "ramda";
+import { createLog } from "../utils/log"
 import { QueryString, List, FieldMap, FieldDef, Fields } from "./types";
-import { _getDefaultFields, getFieldID } from "./../utils";
 import { getOptions, endpointURL, createSoapBody, parser } from "./../caml";
 import { getCurrentSite } from "./../site";
 import { parseFieldValues } from "./castFields";
 import { getList } from "./getList";
 import { SiteURL } from "../user/types";
 
-// constants
+const log = createLog("getItems");
 const ACTION = "GetListItems";
 
 /**
@@ -25,10 +24,15 @@ export async function getItems(
   query: QueryString = null,
   site: SiteURL = null
 ) {
+  log.group();
   const siteUrl = site || (await getCurrentSite());
   const list: List = await getList(listname, siteUrl);
 
+  log.debug("get items from", list);
+
   const mappedFields = mapFields(list, fields);
+
+  log.debug("mapped fields", mappedFields);
 
   const caml = generateCAML(listname, mappedFields, query);
   const body = createSoapBody(ACTION, caml);
@@ -39,7 +43,11 @@ export async function getItems(
   let xml = await response.text();
   let data = parser(xml, ACTION, "listitems.data.row");
 
+  log.debug("data received", data);
+
   let items = parseFieldValues(data, mappedFields);
+
+  log.group();
 
   return items;
 }
@@ -50,8 +58,11 @@ export async function getItems(
  * @return {Object}
  */
 function mapFields(list: List, fields: FieldMap): Fields {
-  const cols = mergeWith(concat, "ID", Object.keys(fields));
+  log.group();
+  // always fetch record ID from SP list
+  const cols = ["ID"].concat(Object.keys(fields));
   let mapped: Fields = [];
+  log.debug("mapFields, cols", cols);
   list.fields.map((listField: FieldDef) => {
     const { staticName, displayName } = listField;
     const inFieldMap = cols.includes(staticName) || cols.includes(displayName);
@@ -60,6 +71,8 @@ function mapFields(list: List, fields: FieldMap): Fields {
       mapped.push({ ...listField, mappedName });
     }
   });
+  log.debug("mapped", mapped);
+  log.group();
   return mapped;
 }
 

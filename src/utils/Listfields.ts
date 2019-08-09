@@ -9,7 +9,7 @@ import { Fields } from "../list/types";
  * do not passed field names you want to fetch from a Sharepoint list.
  * @param {Object} list - List object
  */
-export function _getDefaultFields(list: any) {
+export function getDefaultFields(list: any) {
   const unselect = [
     "FolderChildCount",
     "ItemChildCount",

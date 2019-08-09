@@ -3,11 +3,7 @@
 import { unescapeSharepointText } from "./../utils";
 import { getOptions, endpointURL, createSoapBody, parser } from "./../caml";
 import { getCurrentSite } from "./../site";
-import { SiteURL, StringMap } from "./types";
-
-interface Properties {
-  [key: string]: string | null;
-}
+import { SiteURL, StringMap, Properties } from "./types";
 
 // constants
 const ACTION = "GetUserProfileByName";

@@ -3,7 +3,7 @@
 import { getCurrentSite } from "./../site";
 import { getAccountByEmail } from "./getAccountByEmail";
 import { getUser } from "./getUser";
-import { SiteURL, User } from "./types";
+import { SiteURL, User, Properties } from "./types";
 
 /**
  * Return profile of currently logged in Sharepoint user
@@ -12,7 +12,7 @@ import { SiteURL, User } from "./types";
  * @return {Promise<User>} User profile
  * @return {Null} - Return null if user not found
  */
-export async function getUserByEmail(email: string, site: SiteURL = null) {
+export async function getUserByEmail(email: string, site: SiteURL = null): Promise<Properties | null> {
   const siteUrl = site || (await getCurrentSite());
   const name: User = await getAccountByEmail(email, siteUrl);
   return name.login ? await getUser(name.login, siteUrl) : null;

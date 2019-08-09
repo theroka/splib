@@ -15,3 +15,7 @@ export interface User {
 export interface StringMap {
   [key: string]: string
 }
+
+export interface Properties {
+  [key: string]: string | null;
+}

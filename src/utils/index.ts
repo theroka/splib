@@ -5,7 +5,7 @@ export { SharepointError } from './Error'
 export { chunkArray } from './Arrays'
 
 export {
-  _getDefaultFields,
+  getDefaultFields,
   getFieldID
 } from './Listfields'
 
