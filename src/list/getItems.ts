@@ -28,8 +28,6 @@ export async function getItems(
   const siteUrl = site || (await getCurrentSite());
   const list: List = await getList(listname, siteUrl);
 
-  log.debug("get items from", list);
-
   const mappedFields = mapFields(list, fields);
 
   log.debug("mapped fields", mappedFields);
@@ -59,15 +57,15 @@ export async function getItems(
  */
 function mapFields(list: List, fields: FieldMap): Fields {
   log.group();
-  fields["ID"] = "id"; // always fetch record ID from SP list
-  const cols = Object.keys(fields);
+  let _fields: FieldMap = { ...fields, ID: "id" } // always fetch record ID from SP list
+  let cols = Object.keys(_fields);
   let mapped: Fields = [];
   log.debug("mapFields, cols", cols);
   list.fields.map((listField: FieldDef) => {
     const { staticName, displayName } = listField;
     const inFieldMap = cols.includes(staticName) || cols.includes(displayName);
     if (inFieldMap) {
-      let mappedName = fields[staticName] || fields[displayName];
+      let mappedName = _fields[staticName] || _fields[displayName];
       mapped.push({ ...listField, mappedName });
     }
   });
