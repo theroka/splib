@@ -1,5 +1,6 @@
 "use strict";
 
+import { createLog } from "../utils/log";
 import {
   parseCalculated,
   parseMultiChoice,
@@ -14,6 +15,7 @@ import {
 import { unescapeSharepointText } from "./../utils";
 import { Fields, FieldDef, FuncMap } from "./types";
 
+const log = createLog("list")
 
 const parseFuncs: FuncMap = {
   "text": (v: any) => unescapeSharepointText(v),
@@ -35,8 +37,9 @@ const parseFuncs: FuncMap = {
 
 
 export function parseFieldValues(data: Array<any>, fields: Fields) {
-
-  return data.map(item => {
+  log.group("parseFieldValues");
+  log.debug("fields", fields);
+  let values = data.map(item => {
 
     let obj: any = {};
 
@@ -66,5 +69,6 @@ export function parseFieldValues(data: Array<any>, fields: Fields) {
 
     return obj;
   });
-
+  log.group();
+  return values;
 }

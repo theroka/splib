@@ -44,8 +44,8 @@ class Log {
     if (this.level > 4) console.log("[Debug]", `(${this.name})`, ...msg);
   }
 
-  group() {
-    this.grouped ? console.groupEnd() : console.groupCollapsed(this.name);
+  group(label?: string) {
+    this.grouped ? console.groupEnd() : console.groupCollapsed(label || this.name);
     this.grouped = !this.grouped
   }
 }
