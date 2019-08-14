@@ -59,8 +59,8 @@ export async function getItems(
  */
 function mapFields(list: List, fields: FieldMap): Fields {
   log.group();
-  // always fetch record ID from SP list
-  const cols = ["ID"].concat(Object.keys(fields));
+  fields["ID"] = "id"; // always fetch record ID from SP list
+  const cols = Object.keys(fields);
   let mapped: Fields = [];
   log.debug("mapFields, cols", cols);
   list.fields.map((listField: FieldDef) => {
