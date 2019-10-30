@@ -1,7 +1,7 @@
 "use strict";
 
 import { FieldDef } from "./types"
-import { _toXslString } from "./../utils";
+import { toXLString } from "./XSL";
 import { Fields } from "../list/types";
 
 /**
@@ -17,13 +17,7 @@ export function getDefaultFields(list: any) {
     "_UIVersionString"
   ];
   const visibleFields = list.filter((f: FieldDef) => {
-    return (
-      f.hidden === false &&
-      f.type != "computed" &&
-      f.type != "lookup" &&
-      f.type != "lookupmulti" &&
-      !unselect.includes(f.name)
-    );
+    return (!f.hidden && !(["computed", "lookup", "lookupmulti"].includes(f.type)) && !unselect.includes(f.name));
   });
   const fields: any = {};
   visibleFields.forEach((f: FieldDef) => {
@@ -34,18 +28,18 @@ export function getDefaultFields(list: any) {
 }
 
 /**
- * get ID of sharepoint listfield by fieldname
- * checks against static names, names and display names of fields
- * @param {Field[]} listfields - Fields collection
- * @param {String} fieldname - Name of field to get ID of
- * @TODO: Add switch cases usings XSL field names.
+ * Get ID of field by name in Sharepoint list
+ * Checks against static names, names and display names of fields.
+ * @param {Fields} fields - Fields collection
+ * @param {String} fieldName - Name of field to get ID of
+ * @TODO: Add switch cases using XSL field names.
  */
-export function getFieldID(fields: Fields, fieldname = "") {
+export function getFieldID(fields: Fields, fieldName = "") {
   const dn = new Map();
   const sn = new Map();
   const nm = new Map();
-  const field = fieldname.toLowerCase().trim();
-  const xslField = _toXslString(field);
+  const field = fieldName.toLowerCase().trim();
+  const xslField = toXLString(field);
 
   fields.forEach(f => {
     // @NOTE: Added this filter to prevent set "Title" by DisplayName,

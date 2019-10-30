@@ -14,4 +14,4 @@ export {
   unescapeSharepointText
 } from './Escape'
 
-export { _toXslString } from './XSL'
+export { toXLString } from './XSL'
