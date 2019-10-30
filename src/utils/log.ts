@@ -9,7 +9,7 @@
  * 5 Debug
  */
 
-const defaultLevel = 5;
+const defaultLevel = process.env.NODE_ENV === "debug" ? 5 : 0;
 
 type Message = string | number | boolean | string[] | number[] | boolean[] | object;
 

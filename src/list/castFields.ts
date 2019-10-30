@@ -12,10 +12,11 @@ import {
   parseBool,
   parseDatetimeUTC
 } from "../datatypes";
-import { unescapeSharepointText } from "./../utils";
+import { unescapeSharepointText } from "../utils";
 import { Fields, FieldDef, FuncMap } from "./types";
+import { LookupData } from "../datatypes/types";
 
-const log = createLog("list")
+const log = createLog("list");
 
 const parseFuncs: FuncMap = {
   "text": (v: any) => unescapeSharepointText(v),
@@ -33,13 +34,13 @@ const parseFuncs: FuncMap = {
   "user": (v: any) => parsePerson(v),
   "usermulti": (v: any) => parseMultiPerson(v),
   "url": (v: any) => parseURL(v),
-}
+};
 
 
 export function parseFieldValues(data: Array<any>, fields: Fields) {
-  log.group("parseFieldValues");
-  log.debug("fields", fields);
-  let values = data.map(item => {
+  log.debug("parseFieldValues, data:", data, "fields:", fields);
+  let values: any[];
+  values = data.map(item => {
 
     let obj: any = {};
 
@@ -56,19 +57,35 @@ export function parseFieldValues(data: Array<any>, fields: Fields) {
         case item[staticAttrName] !== undefined:
           attr = staticAttrName;
           break;
+          // @TODO: Remove field match by display name
         case item[field.displayName] !== undefined:
           attr = field.displayName;
           break;
       }
 
       if (attr && field.mappedName) {
-        obj[field.mappedName] = parseFuncs[field.type](item[attr])
+        // @TODO: Use default parse func. Return string if field type does not have assigned parse func.
+        let mn = field.mappedName;
+        switch (true) {
+          case field.type === "lookup":
+            let {id, value} = parseFuncs[field.type](item[attr]);
+            obj[mn] = value;
+            obj[`${mn}ID`] = id;
+            break;
+          case field.type === "multilookup":
+            let kvs = parseFuncs[field.type](item[attr]);
+            obj[mn] = kvs.map((v: LookupData) => v.value);
+            obj[`${mn}ID`] = kvs.map((v: LookupData) => v.id);
+            break;
+          default:
+            obj[mn] = parseFuncs[field.type](item[attr]);
+            break;
+        }
       }
 
     });
 
     return obj;
   });
-  log.group();
   return values;
 }

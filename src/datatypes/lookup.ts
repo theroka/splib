@@ -1,25 +1,20 @@
 "use strict";
 
 // module imports
-import { getType } from "./utils";
-
-interface LookupData {
-  id: number;
-  value: string;
-}
+import { LookupData } from "./types";
 
 // constants
-const DEFAULT_SP_DELIMTER = ";#";
+const DEFAULT_SP_DELIMITER = ";#";
 
 /**
  * Parse and split lookup value into ID and value.
- * @param {String} str
+ * @param {String} input
  * @param {String} delimiter
  * @return {Object}
  */
 export function parseLookup(
   input: string,
-  delimiter: string = DEFAULT_SP_DELIMTER
+  delimiter: string = DEFAULT_SP_DELIMITER
 ): LookupData {
   const kv = input.split(delimiter);
   const id = parseInt(kv[0]);
@@ -29,15 +24,15 @@ export function parseLookup(
 }
 
 /**
- * Parse and split multilookip into array.
- * @param {String} str
- * @param {Object} options
- * @return {Integer[]|Object[]}
+ * Parse and split multi-lookup into array.
+ * @param {String} input
+ * @param {String} [delimiter] Default: ";#"
+ * @return {LookupData[]} Array of lookup items with ID and value.
  */
 export function parseMultiLookup(
   input: string,
-  delimiter: string = DEFAULT_SP_DELIMTER
-) {
+  delimiter: string = DEFAULT_SP_DELIMITER
+): LookupData[] {
   const arr = input.split(delimiter);
   let values: Array<LookupData> = [];
   arr.map((elem, index, collection) => {
@@ -47,7 +42,7 @@ export function parseMultiLookup(
       values.push({ id, value });
     }
   });
-  return values.length != 0 ? values : null;
+  return values.length != 0 ? values : [];
 }
 
 /**
@@ -60,7 +55,7 @@ export function parseMultiLookup(
 export function castLookup(
   value: string,
   id: number | null = null,
-  delimiter = DEFAULT_SP_DELIMTER
+  delimiter = DEFAULT_SP_DELIMITER
 ): string {
   if (value === null) return "";
   return `${id ? id : "-1"}${delimiter}${value}`;
@@ -72,13 +67,13 @@ export function castLookup(
  * Array items can be string, array or object.
  * Pass item collection as [{ id, value }, { id, value }, ...]
  * Pass array collection as [[ id, value ], [ id, value ], ... ]
- * @param {Object[]|Array[]} value
+ * @param {Object[]|Array[]} values
  * @param {String} delimiter
  * @return {String}
  */
 export function castMultiLookup(
   values: Array<any>,
-  delimiter: string = DEFAULT_SP_DELIMTER
+  delimiter: string = DEFAULT_SP_DELIMITER
 ): string {
   if (values === null) return "";
   let lookups: Array<string> = [];

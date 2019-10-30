@@ -2,8 +2,8 @@
 
 import { createLog } from "../utils/log"
 import { QueryString, List, FieldMap, FieldDef, Fields } from "./types";
-import { getOptions, endpointURL, createSoapBody, parser } from "./../caml";
-import { getCurrentSite } from "./../site";
+import { getOptions, endpointURL, createSoapBody, parser } from "../caml";
+import { getCurrentSite } from "../site";
 import { parseFieldValues } from "./castFields";
 import { getList } from "./getList";
 import { SiteURL } from "../user/types";
@@ -14,8 +14,9 @@ const ACTION = "GetListItems";
 /**
  * Get items from a Sharepoint list
  * @param {String} listname Name of Sharepoint list
- * @param {Object} [options]
- * @param {String} [options.site] URL to Sharepoint site
+ * @param {FieldMap} fields Selected fields to get with query.
+ * @param {QueryString} [query] CAML query.
+ * @param {SiteURL} [site] URL of {current} Sharepoint site.
  * @return {Promise<Object[]>}
  */
 export async function getItems(
@@ -57,15 +58,16 @@ export async function getItems(
  */
 function mapFields(list: List, fields: FieldMap): Fields {
   log.group();
-  let _fields: FieldMap = { ...fields, ID: "id" } // always fetch record ID from SP list
+  let _fields: FieldMap = { ...fields, ID: "id" }; // always fetch record ID from SP list
   let cols = Object.keys(_fields);
   let mapped: Fields = [];
   log.debug("mapFields, cols", cols);
   list.fields.map((listField: FieldDef) => {
-    const { staticName, displayName } = listField;
-    const inFieldMap = cols.includes(staticName) || cols.includes(displayName);
+    const { staticName, name, displayName } = listField;
+    // @TODO: Remove matching by display name.
+    const inFieldMap = cols.includes(staticName) || cols.includes(name) || cols.includes(displayName);
     if (inFieldMap) {
-      let mappedName = _fields[staticName] || _fields[displayName];
+      let mappedName = _fields[staticName] || _fields[name] || _fields[displayName];
       mapped.push({ ...listField, mappedName });
     }
   });
@@ -75,11 +77,32 @@ function mapFields(list: List, fields: FieldMap): Fields {
 }
 
 /**
+ * Creates CAML string to get items from Sharepoint list.
  * @param {String} listname - Name of Sharepoint list
  * @param {String} [query=''] - Optional CAML query to filter result
- * @param {String} viewfields - String with FieldRef-Nodes to get specific fields from Sharepoint list
- * @param {Integer} [rowlimit=5000] - Limit of rows in response
+ * @param {String} fields - String with FieldRef-Nodes to get specific fields from Sharepoint list
  * @return {String} - Return CAML/XML string
+ *
+ * ```
+ * <listName>${listname}</listName>
+ * <viewName></viewName>
+ * <query>
+ *   <Query>
+ *     ...
+ *   </Query>
+ * </query>
+ * <viewFields>
+ *   <ViewFields Properties='True'>
+ *     ...
+ *   </ViewFields>
+ * </viewFields>
+ * <rowLimit>5000</rowLimit>
+ * <queryOptions>
+ *   <QueryOptions>
+ *      ...
+ *   </QueryOptions>
+ * </queryOptions>
+ * ```
  */
 function generateCAML(
   listname: string,
