@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/theroka/splib.git"
   },
-  "author": "Robin Kauschke <robin.kauschke@gmail.com>",
+  "author": "theroka <rokatron.rk@gmail.com>",
   "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/theroka/splib/issues"
