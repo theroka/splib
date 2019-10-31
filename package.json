@@ -1,6 +1,6 @@
 {
   "name": "splib",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Fetch and write Sharepoint list data.",
   "main": "dist/index.js",
   "scripts": {
