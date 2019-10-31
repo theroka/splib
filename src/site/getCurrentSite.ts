@@ -1,7 +1,6 @@
 "use strict";
 
-import { SharepointError } from "./../utils";
-import { getOptions, endpointURL, createSoapBody, parser } from "./../caml";
+import { getOptions, endpointURL, createSoapBody, parser } from "../caml";
 
 const GET_CURRENT_SITE_ACTION = "WebUrlFromPageUrl";
 
@@ -16,9 +15,11 @@ export async function getCurrentSite(): Promise<any> {
   const caml = `<pageUrl>${href}</pageUrl>`;
   const body = createSoapBody(GET_CURRENT_SITE_ACTION, caml);
   const url = endpointURL(GET_CURRENT_SITE_ACTION, site[0] + "//" + site[2]);
-  let options = getOptions(GET_CURRENT_SITE_ACTION);
+  const options = getOptions(GET_CURRENT_SITE_ACTION);
+
   let response = await fetch(url, { ...options, body });
   if (!response.ok) return null;
   let xml = await response.text();
+
   return parser(xml, GET_CURRENT_SITE_ACTION)
 }

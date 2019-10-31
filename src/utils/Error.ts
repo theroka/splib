@@ -1,12 +1,12 @@
 "use strict";
 
-import { parser } from "./../caml";
+import { parser } from "../caml";
 
 export type StatusCode = number | string;
 
-export interface SharepointFaultDeails {
-  errorstring: string;
-  errorcode: string;
+export interface SharepointFaultDetails {
+  errorString: string;
+  errorCode: string;
 }
 
 /**
@@ -15,11 +15,11 @@ export interface SharepointFaultDeails {
  * @param {String} xml - Response XML string
  */
 export function SharepointError(status: StatusCode, xml: string) {
-  const fault: SharepointFaultDeails = parser(xml, "Fault.detail")[0];
+  const fault: SharepointFaultDetails = parser(xml, "Fault.detail")[0];
   const error = {
     status,
-    code: fault ? fault.errorcode : null,
-    error: fault ? fault.errorstring : null
+    code: fault ? fault.errorCode : null,
+    error: fault ? fault.errorString : null
   };
   return new Error(JSON.stringify(error));
 }

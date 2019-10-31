@@ -6,14 +6,14 @@ import { getType } from "./utils";
  * Parse response XML value to boolean
  */
 export function parseBool(input: string): boolean {
-  return input.toLowerCase().trim() === "true" ? true : false
+  return input.toLowerCase().trim() === "true";
 }
 
 /**
  * Cast Javascript value into 'boolean' Sharepoint type.
  * @param {Number|Boolean|String} value Javascript value to cast into 'boolean' Sharepoint type
  * @return {String} 'TRUE' or 'FALSE'. Default: 'FALSE'
- * @example
+ * ````javascript
  * castBool(1) // true
  * castBool(-1) // false
  * castBool(2) // false
@@ -23,6 +23,7 @@ export function parseBool(input: string): boolean {
  * castBool('True') // true
  * castBool('False') // false
  * castBool('Foobar') // false
+ * ````
  */
 export function castBool(value: any) {
   if (value === null) return "";

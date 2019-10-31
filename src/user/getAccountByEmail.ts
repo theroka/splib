@@ -1,8 +1,8 @@
 "use strict";
 
 import { SiteURL, Login, User } from "./types";
-import { getOptions, endpointURL, createSoapBody, parser } from "./../caml";
-import { getCurrentSite } from "./../site";
+import { getOptions, endpointURL, createSoapBody, parser } from "../caml";
+import { getCurrentSite } from "../site";
 
 const ACTION = "GetUserLoginFromEmail";
 const NAMESPACE = "http://schemas.microsoft.com/sharepoint/soap/directory/";
@@ -10,6 +10,7 @@ const NAMESPACE = "http://schemas.microsoft.com/sharepoint/soap/directory/";
 /**
  * Return profile of currently logged in Sharepoint user
  * Does not return full profile data - just Name, WorkPhone, Email and AccountName
+ * @param {String} email - Email of account to get profile from.
  * @param {string} site - URL of Sharepoint site
  * @return {Login} - User login
  * @return {Null} - Return null if user not found
@@ -31,13 +32,13 @@ export async function getAccountByEmail(
 
   let response = await fetch(url, { ...options, body });
   let xml = await response.text();
-  let login: Array<Login> = parser(xml, ACTION, "GetUserLoginFromEmail.User");
+  let profile: Array<Login> = parser(xml, ACTION, "GetUserLoginFromEmail.User");
 
-  let user: User = {
-    name: login[0].DisplayName.trim(),
+  const { DisplayName, Login } = profile[0];
+
+  return {
+    name: DisplayName.trim(),
     email,
-    login: login[0].Login.toLowerCase().trim()
+    login: Login.toLowerCase().trim()
   };
-
-  return user;
 }

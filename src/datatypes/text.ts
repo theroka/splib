@@ -1,9 +1,6 @@
 "use strict";
 
-import { DataArray } from "./types";
 import { getType } from "./utils";
-import { castDatetimeUTC } from "./Datetime";
-import { DataItem } from "../list/types";
 
 /**
  * Cast JS typed values into Text form used by Sharepoint list fields.
@@ -30,17 +27,6 @@ export function castText(value: string): string | null {
       // @NOTE: To use .toFixed() additionally, useful?
       cast = value.toString();
       break;
-    // case "date":
-    //   cast = castDatetimeUTC(value: string, false);
-    //   break;
-    // case "array":
-    //   cast = value.map(x: string | number | boolean => `${castText(x)}`).join("; ");
-    //   break;
-    // case "object":
-    //   cast = Object.keys(value)
-    //     .map((key: string) => `${key}: ${castText(value[key])}`)
-    //     .join(", ");
-    //   break;
   }
   return cast;
 }

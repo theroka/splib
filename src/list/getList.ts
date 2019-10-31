@@ -2,19 +2,18 @@
 
 import { createLog } from "../utils/log";
 import { parse } from "date-fns";
-import { getOptions, endpointURL, createSoapBody, parser } from "./../caml";
-import { getCurrentSite } from "./../site";
+import { getOptions, endpointURL, createSoapBody, parser } from "../caml";
+import { getCurrentSite } from "../site";
 import { SiteURL } from "../user/types";
 import { List } from "./types";
 
-const log = createLog("getList")
+const log = createLog("getList");
 const ACTION = "GetList";
 
 /**
  * Get all field definitions of a Sharepoint list
  * @param {String} listname Name of Sharepoint list
- * @param {Object} [options]
- * @param {String} [options.site] URL to Sharepoint list
+ * @param {String} [site] URL to Sharepoint list. Defaults to current site.
  * @return {Promise<Object>}
  */
 export async function getList(listname: string, site: SiteURL = null): Promise<List> {
@@ -29,7 +28,7 @@ export async function getList(listname: string, site: SiteURL = null): Promise<L
   let response = await fetch(url, { ...options, body });
   let xml = await response.text();
 
-  log.debug("parser path", "List")
+  log.debug("parser path", "List");
 
   let data: any = parser(xml, ACTION, "List")[0];
 
@@ -46,7 +45,7 @@ export async function getList(listname: string, site: SiteURL = null): Promise<L
     dateOnly: field.Hidden === "TRUE" || false
   }));
 
-  log.debug("fields", fields)
+  log.debug("fields", fields);
 
   let list = {
     id: data.ID,
@@ -55,8 +54,8 @@ export async function getList(listname: string, site: SiteURL = null): Promise<L
     created: parse(data.Created) || null,
     modified: parse(data.Modified) || null,
     defaultView: data.DefaultViewUrl || "",
-    attachments: data.EnableAttachments === "True" ? true : false,
-    folders: data.EnableFolderCreation === "True" ? true : false,
+    attachments: data.EnableAttachments === "True",
+    folders: data.EnableFolderCreation === "True",
     itemsCount: parseInt(data.ItemCount),
     fields
   };

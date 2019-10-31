@@ -1,8 +1,8 @@
 "use strict";
 
-import { SiteURL, Login, User } from "./types";
-import { getOptions, endpointURL, createSoapBody, parser } from "./../caml";
-import { getCurrentSite } from "./../site";
+import {SiteURL} from "./types";
+import {createSoapBody, endpointURL, getOptions, parser} from "../caml";
+import {getCurrentSite} from "../site";
 
 const ACTION = "GetUserMemberships";
 const NAMESPACE =
@@ -11,7 +11,8 @@ const NAMESPACE =
 /**
  * Return profile of currently logged in Sharepoint user
  * Does not return full profile data - just Name, WorkPhone, Email and AccountName
- * @param {string} site - URL of Sharepoint site
+ * @param {String} accountName
+ * @param {String} site - URL of Sharepoint site
  * @return {Object} - User profile data
  */
 export async function getMemberships(accountName: string, site: SiteURL = null) {
@@ -22,8 +23,6 @@ export async function getMemberships(accountName: string, site: SiteURL = null) 
   const options = getOptions(ACTION, NAMESPACE);
 
   let response = await fetch(url, { ...options, body });
-  let xml = await response.text()
-  let data = parser(xml, ACTION, "MembershipData");
-
-  return data
+  let xml = await response.text();
+  return parser(xml, ACTION, "MembershipData")
 }

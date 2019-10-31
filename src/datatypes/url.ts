@@ -1,12 +1,21 @@
 "use strict";
 
+interface Link {
+  url: string,
+  description: string
+}
+
+const DELIMITER = ",";
+
 /**
  * Parse 'Url' Sharepoint type into an object with props for link and description.
- * @param {String} url
+ * @param {String} link
+ * @param {String} [delimiter=","]
+ * @returns {Link}
  */
-export function parseURL(url: string, delimiter = ",") {
-  const parts = ("" + url).split(delimiter);
-  const link = parts[0].trim();
+export function parseURL(link: string, delimiter = DELIMITER): Link {
+  const parts = ("" + link).split(delimiter);
+  const url = parts[0].trim();
   const description = parts[1].trim();
-  return { url: link, description };
+  return { url, description };
 }

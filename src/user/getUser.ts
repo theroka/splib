@@ -1,8 +1,8 @@
 "use strict";
 
-import { unescapeSharepointText } from "./../utils";
-import { getOptions, endpointURL, createSoapBody, parser } from "./../caml";
-import { getCurrentSite } from "./../site";
+import { unescapeSharepointText } from "../utils";
+import { getOptions, endpointURL, createSoapBody, parser } from "../caml";
+import { getCurrentSite } from "../site";
 import { SiteURL, StringMap, Properties } from "./types";
 
 // constants
@@ -24,13 +24,12 @@ const UserFields: StringMap = {
   WebSite: "websiteURL",
   PictureURL: "thumbnail",
   Gender: "gender"
-}
+};
 
 /**
  * Get profile of user by account name
  * @param {String} username=null - User account name, e.g. SHAREPPROD\\a1b2c3d4e5
- * @param {Object} [options]
- * @param {String} [options.site] URL of Sharepoint site
+ * @param {String} [site] URL of Sharepoint site. Defaults to current site.
  * @return {User} User profile
  */
 export async function getUser(username: string, site: SiteURL = null) {

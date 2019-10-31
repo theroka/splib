@@ -1,30 +1,23 @@
 "use strict";
 
-import { mergeWith, concat } from "ramda";
-import { chunkArray, getFieldID } from "../utils";
-import {
-  getOptions,
-  endpointURL,
-  createSoapBody,
-  parser,
-  generateItemCAML
-} from "../caml";
+import {concat, mergeWith} from "ramda";
+import {chunkArray, getFieldID} from "../utils";
+import {createSoapBody, endpointURL, generateItemCAML, getOptions, parser} from "../caml";
 import {
   castBool,
-  castMultiChoice,
   castDatetimeUTC,
   castInteger,
   castLookup,
+  castMultiChoice,
   castMultiLookup,
   castNote,
   castPerson,
   castText
 } from "../datatypes";
-import { getCurrentSite } from "../site";
-import { getList } from "./getList";
-import { SiteURL } from "../user/types";
-import { Fields, DataItem, FieldDef, FuncMap } from "./types";
-import props from "ramda/es/props";
+import {getCurrentSite} from "../site";
+import {getList} from "./getList";
+import {SiteURL} from "../user/types";
+import {DataItem, FieldDef, Fields, FuncMap} from "./types";
 
 const action = "UpdateListItems";
 const options = getOptions(action);
@@ -34,9 +27,8 @@ const options = getOptions(action);
  * If you pass items with propertyX = null, these fields will be set to "" (empty CAML string).
  * @param {String} listname
  * @param {Object[]} items
- * @param {Object} [options]
- * @param {String} [options.site=null]
- * @param {String} [options.op='New']
+ * @param {String} [operation="New"] Type of CAML operation for CRUD items. Defaults to "New".
+ * @param {String} [site=null] URL of Sharepoint site. Defaults to current site.
  * @return {Promise<Object[]>}
  */
 export async function _crudListItems(
@@ -103,7 +95,7 @@ export async function _crudListItems(
  * A collection item only contains ID props where original props
  * names and field names are matching.
  * Item props which does not match with any field of the list are omitted.
- * @param {Object[]} items - Items collection to map
+ * @param {Object[]} item - Item to map
  * @param {Object[]} fields - List fields collection
  * @return {Object[]} Mapped items collection
  * @TODO: Add option, to omit computed/calculated field on creating or updating list items.
@@ -156,10 +148,9 @@ function typePropValue(item: DataItem, fields: Fields) {
   propNames.forEach((propName: string) => {
     let spType = getFieldType(propName, fields);
     let value: any = item[propName];
-    let castedValue = spType
-      ? castFuncs[spType](value)
-      : castText(value);
-    casted[propName] = castedValue;
+    casted[propName] = spType
+        ? castFuncs[spType](value)
+        : castText(value);
   });
   return casted;
 }

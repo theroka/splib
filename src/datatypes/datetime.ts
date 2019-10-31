@@ -5,7 +5,7 @@ import { getType } from "./utils";
 
 /**
  * Parse UTC datetime string into Date object
- * @param {Sring} input
+ * @param {String} input
  * @return {Date}
  */
 export function parseDatetimeUTC(input: string): Date {
@@ -29,26 +29,19 @@ export function parseDatetimeUTC(input: string): Date {
  * @param {Date} date - Date object
  * @param {Boolean} dateOnly=false Set 'true' for set timestamp to 00:00:00
  * @return {String}
- * @example
+ *
+ * ````javascript
  * let d = new Date() // e.g. 01.01.1970 13:30
  * let t = castDatetimeUTC(d)
  * console.log(t) // 1970-01-01T13:30:00Z
+ * ````
  */
 export function castDatetimeUTC(date: Date, dateOnly = false): string {
   if (["", null, undefined].includes) return "";
   let cast = "";
   const dateFormat = "yyyy-MM-ddTHH:mm:ssZZ";
-  switch (getType(date)) {
-    case "date":
-      cast = format(date, dateFormat)
-      // const dy = date.getUTCFullYear();
-      // const dm = ("0" + date.getUTCMonth()).slice(-2);
-      // const dd = ("0" + date.getUTCDate()).slice(-2);
-      // const th = dateOnly ? "00" : ("0" + date.getUTCHours()).slice(-2);
-      // const tm = dateOnly ? "00" : ("0" + date.getUTCMinutes()).slice(-2);
-      // const ts = dateOnly ? "00" : ("0" + date.getUTCSeconds()).slice(-2);
-      // cast = `${dy}-${dm}-${dd}T${th}:${tm}:${ts}Z`;
-      break;
+  if (getType(date) === "date") {
+    cast = format(date, dateFormat);
   }
   return cast;
 }

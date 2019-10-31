@@ -10,13 +10,9 @@ import { getType } from "./utils";
  */
 export function castNote(value: string) {
   if (value === null) return "";
-  let cast = null;
-  switch (getType(value)) {
-    case "string":
-      cast = `<![CDATA[${value}]]>`;
-      break;
-    default:
-      cast = "";
+  let cast = "";
+  if (getType(value) === "string") {
+    cast = `<![CDATA[${value}]]>`;
   }
   return cast;
 }

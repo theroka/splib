@@ -55,7 +55,7 @@ export function parseMultiPerson(
 ): Array<User> | null {
   if (input == "" || input == null) return null;
   const userDomainRegex = /^.*\\.*$/g;
-  const emailRegex = /^[a-z0-9_\-\.]*@[a-z0-9_\-\.]*\.[a-z]{2,5}$/g;
+  const emailRegex = /^([a-z0-9_\-.]*)@([a-z0-9_\-.]*)\.([a-z]{2,5})$/g;
   const tokens = input.split(delimiter);
   let users: Array<User> = [];
   tokens.forEach((v, i, c) => {

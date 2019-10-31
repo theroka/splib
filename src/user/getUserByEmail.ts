@@ -1,6 +1,6 @@
 "use strict";
 
-import { getCurrentSite } from "./../site";
+import { getCurrentSite } from "../site";
 import { getAccountByEmail } from "./getAccountByEmail";
 import { getUser } from "./getUser";
 import { SiteURL, User, Properties } from "./types";
@@ -8,6 +8,7 @@ import { SiteURL, User, Properties } from "./types";
 /**
  * Return profile of currently logged in Sharepoint user
  * Does not return full profile data - just Name, WorkPhone, Email and AccountName
+ * @param {String} email - Email of user.
  * @param {String} site - URL of Sharepoint site
  * @return {Promise<User>} User profile
  * @return {Null} - Return null if user not found

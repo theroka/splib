@@ -1,8 +1,8 @@
 "use strict";
 
-import { getOptions, endpointURL, createSoapBody, parser } from "./../caml";
-import { getCurrentSite } from "./../site";
-import { SiteURL } from "../user/types";
+import {createSoapBody, endpointURL, getOptions, parser} from "../caml";
+import {getCurrentSite} from "../site";
+import {SiteURL} from "../user/types";
 
 const ACTION = "DeleteAttachment";
 
@@ -11,8 +11,7 @@ const ACTION = "DeleteAttachment";
  * @param {String} listname Name of Sharepoint list
  * @param {String|Number} itemID ID of list item
  * @param {String} attachmentUrl Remote file URL attached to list item
- * @param {Object} [options] Optional
- * @param {String} [options.site] URL of Sharepoint site
+ * @param {String} [site] URL of Sharepoint site. Defaults to current site.
  * @return {Promise}
  */
 export async function deleteAttachment(
@@ -33,7 +32,5 @@ export async function deleteAttachment(
 
   let response = await fetch(url, { ...options, body });
   let xml = await response.text();
-  let data = parser(xml, ACTION);
-
-  return data;
+  return parser(xml, ACTION);
 }

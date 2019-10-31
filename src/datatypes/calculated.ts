@@ -8,9 +8,7 @@ const DEFAULT_DELIMITER = ";#";
 /**
  * Parse 'Url' Sharepoint type into an object with props for link and description.
  * @param {String} fieldValue - Field attribute string from Sharepoint XML response
- * @param {Object} [options]
- * @param {Object} [options.delimiter=';#'] Overwrite default delimiter
- * @param {Object} [options.includeType=false] Return object with { type, value, parsedValue }
+ * @param {Object} [delimiter=";#"] Overwrite default delimiter
  */
 export function parseCalculated(
   fieldValue: string,
@@ -30,7 +28,7 @@ export function parseCalculated(
       parsedValue = parseFloat(value);
       break;
     case "boolean":
-      parsedValue = (value === "1") || (value.toLowerCase().trim() === "true") ? true : false;
+      parsedValue = (value === "1") || (value.toLowerCase().trim() === "true");
       break;
     case "datetime":
       parsedValue = parse(value);

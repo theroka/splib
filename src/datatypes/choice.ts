@@ -3,16 +3,17 @@
 import { getType } from "./utils";
 import { castDatetimeUTC } from "./Datetime";
 
-const DEFAULT_SP_DELIMTER = ";#";
+const DEFAULT_SP_DELIMITER = ";#";
 
 /**
  * Parse and split multichoice value from Sharepoint into string array
- * @param {String} str - String to parse
+ * @param {String} input - String to parse
+ * @param {String} [delimiter=";#"] Define choice values delimiter.
  * @returns {String[]}
  */
 export function parseMultiChoice(
   input: string,
-  delimiter: string = DEFAULT_SP_DELIMTER
+  delimiter: string = DEFAULT_SP_DELIMITER
 ) {
   if (!input || input == "" || input == null) return null;
   let values: Array<string> = input.split(delimiter);
@@ -53,16 +54,18 @@ export function castChoice(value: any) {
 
 /**
  * Joins array to Sharepoint type 'multichoice'.
- * @param {String[]|Number[]} value
- * @param {String} [delimiter=';#'] Overwrite default Sharepoint delimiter
+ * @param {String[]|Number[]} values
+ * @param {String} [delimiter=";#"] Overwrite default Sharepoint delimiter
  * @return {String}
- * @example
+ *
+ * ````javascript
  * const arr = [ 'hello', 'world' ]
- * sharepoint.castMultiChoice(arr) // --> ';#hello;#worl;#'
+ * sharepoint.castMultiChoice(arr) // --> ';#hello;#world;#'
+ * ````
  */
 export function castMultiChoice(
   values: Array<any>,
-  delimiter = DEFAULT_SP_DELIMTER
+  delimiter = DEFAULT_SP_DELIMITER
 ): string {
   if (values === null || !(values instanceof Array)) return "";
   let choices: Array<any> = values.filter(

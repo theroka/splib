@@ -1,9 +1,8 @@
 "use strict";
 
-import { SharepointError } from "./../utils";
-import { getOptions, endpointURL, createSoapBody, parser } from "./../caml";
-import { getCurrentSite } from "./../site";
-import { SiteURL } from "../user/types";
+import {createSoapBody, endpointURL, getOptions, parser} from "../caml";
+import {getCurrentSite} from "../site";
+import {SiteURL} from "../user/types";
 
 const ACTION = "AddAttachment";
 
@@ -13,8 +12,7 @@ const ACTION = "AddAttachment";
  * @param {String|Number} itemID ID of list item.
  * @param {String} filename Filename.
  * @param {String} base64 Base64 encoded file to attach.
- * @param {Object} [options]
- * @param {String} [options.site] URL of Sharepoint site. Default: Current site.
+ * @param {String} [site] URL of Sharepoint site. Default: Current site.
  * @return {Promise}
  */
 export async function addAttachment(
@@ -36,7 +34,5 @@ export async function addAttachment(
 
   let response = await fetch(url, { ...options, body });
   let xml = await response.text();
-  let data = parser(xml, ACTION);
-
-  return data
+  return parser(xml, ACTION)
 }
